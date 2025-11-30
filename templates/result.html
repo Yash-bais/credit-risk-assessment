@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Risk Assessment Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='animations.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Credit Risk Assessment Results</h1>
+        </header>
+
+        <div class="results-container">
+            <!-- Main Prediction Card -->
+            <div class="result-card main-result {{ 'high-risk' if results.ensemble_prediction == 1 else 'low-risk' }}">
+                <div class="result-header">
+                    <h2>{{ results.recommendation }}</h2>
+                    <span class="risk-badge {{ 'badge-high' if results.ensemble_prediction == 1 else 'badge-low' }}">
+                        {{ results.risk_level }}
+                    </span>
+                </div>
+                
+                <div class="probability-display">
+                    <div class="prob-bar">
+                        <div class="prob-fill no-default" style="width: {{ results.ensemble_probability.no_default }}%">
+                            <span>No Default: {{ results.ensemble_probability.no_default }}%</span>
+                        </div>
+                        <div class="prob-fill default" style="width: {{ results.ensemble_probability.default }}%">
+                            <span>Default: {{ results.ensemble_probability.default }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Predicted Score and Grade -->
+                <div class="score-grade-section">
+                    <div class="score-item">
+                        <h4>Predicted Score</h4>
+                        <div class="score-value">{{ results.predicted_score }}</div>
+                        <small>Out of 100</small>
+                    </div>
+                    <div class="grade-item">
+                        <h4>Predicted Grade</h4>
+                        <div class="grade-value grade-{{ results.predicted_grade }}">{{ results.predicted_grade }}</div>
+                        <small>Loan Risk Grade</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Individual Model Predictions -->
+            <div class="models-section">
+                <h3>Individual Model Predictions</h3>
+                <div class="models-grid">
+                    {% for model_name, prediction in results.individual_predictions.items() %}
+                    <div class="model-card">
+                        <h4>{{ model_name.replace('_', ' ').title() }}</h4>
+                        <div class="model-prediction {{ 'pred-high' if prediction == 1 else 'pred-low' }}">
+                            {{ 'High Risk' if prediction == 1 else 'Low Risk' }}
+                        </div>
+                        <div class="model-probabilities">
+                            <div class="prob-item">
+                                <span class="prob-label">No Default:</span>
+                                <span class="prob-value">{{ "%.2f"|format(results.individual_probabilities[model_name].no_default) }}%</span>
+                            </div>
+                            <div class="prob-item">
+                                <span class="prob-label">Default:</span>
+                                <span class="prob-value">{{ "%.2f"|format(results.individual_probabilities[model_name].default) }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Key Factors Summary -->
+            <div class="factors-section">
+                <h3>Key Assessment Factors</h3>
+                <div class="factors-grid">
+                    <div class="factor-item">
+                        <strong>Full Name:</strong> {{ form_data.get('full_name', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Age:</strong> {{ form_data.get('age', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Credit Score:</strong> {{ form_data.get('credit_score', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Annual Income:</strong> ${{ form_data.get('annual_income', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Loan Amount:</strong> ${{ form_data.get('loan_amount', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Existing Debt:</strong> ${{ form_data.get('existing_debt', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Employment Status:</strong> {{ form_data.get('employment_status', 'N/A').replace('_', ' ').title() }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Years Employed:</strong> {{ form_data.get('years_employed', 'N/A') }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Credit History:</strong> {{ form_data.get('credit_history_years', 'N/A') }} years
+                    </div>
+                    <div class="factor-item">
+                        <strong>Home Ownership:</strong> {{ form_data.get('home_ownership', 'N/A').title() }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Loan Purpose:</strong> {{ form_data.get('loan_purpose', 'N/A').title() }}
+                    </div>
+                    <div class="factor-item">
+                        <strong>Loan Term:</strong> {{ form_data.get('loan_term_months', 'N/A') }} months
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/" class="btn-primary">🔄 New Assessment</a>
+                <button onclick="window.print()" class="btn-secondary">🖨️ Print Results</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Results generated using ensemble of ML models</p>
+    </footer>
+</body>
+</html>
+

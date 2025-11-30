@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Risk Assessment System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='animations.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏦 Credit Risk Assessment System</h1>
+            <p class="subtitle">Loan default prediction using machine learning</p>
+        </header>
+
+        <form action="/predict" method="POST" class="credit-form">
+            <!-- Application Details Section -->
+            <section class="form-section">
+                <h2>Application Details</h2>
+                
+                <!-- Personal Information -->
+                <div class="subsection">
+                    <h3>Personal Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="full_name">Full Name</label>
+                            <input type="text" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-with-icon">
+                                <input type="email" id="email" name="email" required>
+                                <span class="input-icon">✉</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="optional">(Optional)</span></label>
+                            <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="18" max="100" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employment & Income -->
+                <div class="subsection">
+                    <h3>Employment & Income</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="employment_status">Employment Status</label>
+                            <select id="employment_status" name="employment_status" required>
+                                <option value="">Select...</option>
+                                <option value="employed">Employed</option>
+                                <option value="self_employed">Self-Employed</option>
+                                <option value="unemployed">Unemployed</option>
+                                <option value="retired">Retired</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="years_employed">Years Employed</label>
+                            <input type="number" id="years_employed" name="years_employed" step="0.1" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="annual_income">Annual Income ($)</label>
+                            <input type="number" id="annual_income" name="annual_income" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Information -->
+                <div class="subsection">
+                    <h3>Credit Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="credit_score">Credit Score (300-850)</label>
+                            <input type="number" id="credit_score" name="credit_score" min="300" max="850" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="credit_history_years">Credit History (Years)</label>
+                            <input type="number" id="credit_history_years" name="credit_history_years" step="0.1" min="0" required>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loan Details & Financial Obligations Section -->
+            <section class="form-section">
+                <h2>Loan Details</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="loan_amount">Requested Amount ($)</label>
+                        <input type="number" id="loan_amount" name="loan_amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loan_purpose">Purpose</label>
+                        <select id="loan_purpose" name="loan_purpose" required>
+                            <option value="">Select...</option>
+                            <option value="personal">Personal</option>
+                            <option value="education">Education</option>
+                            <option value="business">Business</option>
+                            <option value="vehicle">Vehicle</option>
+                            <option value="home">Home</option>
+                            <option value="medical">Medical</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="loan_term_months">Loan Term (Months)</label>
+                        <select id="loan_term_months" name="loan_term_months" required>
+                            <option value="">Select...</option>
+                            <option value="12">12 months</option>
+                            <option value="24">24 months</option>
+                            <option value="36">36 months</option>
+                            <option value="48">48 months</option>
+                            <option value="60">60 months</option>
+                            <option value="72">72 months</option>
+                            <option value="84">84 months</option>
+                            <option value="96">96 months</option>
+                            <option value="120">120 months</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="interest_rate">Interest Rate (%)</label>
+                        <input type="number" id="interest_rate" name="interest_rate" step="0.1" min="0" max="30" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="has_collateral" name="has_collateral" value="1">
+                            <span>I have collateral for this loan</span>
+                        </label>
+                        <small class="checkbox-description">Property or assets that can be used to secure the loan.</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financial Obligations Section -->
+            <section class="form-section">
+                <h2>Financial Obligations</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="existing_debt">Existing Debt ($)</label>
+                        <input type="number" id="existing_debt" name="existing_debt" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="home_ownership">Home Ownership</label>
+                        <select id="home_ownership" name="home_ownership" required>
+                            <option value="">Select...</option>
+                            <option value="own">Own</option>
+                            <option value="rent">Rent</option>
+                            <option value="mortgage">Mortgage</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary" id="submitBtn">Check Eligibility →</button>
+                <button type="reset" class="btn-secondary" id="resetBtn">Reset Form</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>Powered by Machine Learning Models: Random Forest, SVM, and Logistic Regression</p>
+    </footer>
+</body>
+</html>
