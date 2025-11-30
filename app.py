@@ -548,5 +548,11 @@ if __name__ == '__main__':
     print("Loading models...")
     load_or_train_models()
     print("Models loaded. Starting Flask app...")
+    # For local development
     app.run(debug=True, host='0.0.0.0', port=5000)
+else:
+    # For production (Gunicorn)
+    print("Loading models for production...")
+    load_or_train_models()
+    print("Models loaded. Ready for production.")
 

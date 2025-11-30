@@ -34,9 +34,10 @@ env/
 *~
 
 # Models (trained models can be large)
-models/*.pkl
-models/*.h5
-models/*.joblib
+# Uncomment if models are too large for GitHub
+# models/*.pkl
+# models/*.h5
+# models/*.joblib
 
 # Data files (optional - remove if you want to include CSV)
 # *.csv

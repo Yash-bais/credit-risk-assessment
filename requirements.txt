@@ -5,4 +5,5 @@ seaborn
 scikit-learn
 flask
 imbalanced-learn
+gunicorn
 
